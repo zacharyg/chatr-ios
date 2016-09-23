@@ -24,8 +24,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
 
         // Do any additional setup after loading the view.
         timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(ChatViewController.onTimer), userInfo: nil, repeats: true)
@@ -33,12 +31,13 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func loadMessages(){
         let query = PFQuery(className:"Message_fbuJuly2016")
-        query.whereKeyExists("text")
+        //query.whereKeyExists("user")
+        query.includeKey("user")
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             
             if error == nil {
-                query.orderByDescending("createdAt")
+                //query.orderByDescending("createdAt")
                 // The find succeeded.
                 print("Successfully retrieved \(objects!.count) messages.")
                 // Do something with the found objects
@@ -60,6 +59,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         if(validMessage()){
             let message = PFObject(className:"Message_fbuJuly2016")
             message["text"] = messageField.text!
+            message["user"] = PFUser.currentUser()
+            //print(PFUser.currentUser()?.username)
             let temp = message["text"]
             message.saveInBackgroundWithBlock {
                 (success: Bool, error: NSError?) -> Void in
@@ -101,6 +102,20 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCellWithIdentifier("ChatCell", forIndexPath: indexPath) as! ChatTableViewCell
         let singleObj = q[indexPath.row] 
         let msg = singleObj["text"] as! String
+        if let usr = singleObj["user"] as? PFUser{
+            cell.userLabel.text = usr.username
+            //print(usr.username!)
+        }
+        else{
+            cell.userLabel.text! = "anonymous"
+        }
+//        if usr != nil {
+//            cell.userLabel.text = usr.username
+//        }
+//        else{
+//            cell.userLabel.text = "anonymous"
+//        }
+        
         cell.messageLabel.text = msg
         
         
