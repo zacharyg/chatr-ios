@@ -9,12 +9,9 @@ import Parse
 import UIKit
 
 class LoginViewController: UIViewController {
-
-    @IBOutlet weak var emailField: UITextField!
+    @IBOutlet weak var usernameField: UITextField!
     
-    @IBOutlet weak var passField: UITextField!
-
-    
+    @IBOutlet weak var passwordField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,48 +26,59 @@ class LoginViewController: UIViewController {
     
     
     @IBAction func signUp(sender: AnyObject) {
-        let email = emailField.text
-        let pass = passField.text
-        
-        // initialize a user object
-        let newUser = PFUser()
-        
-        // set user properties
-        newUser.username = email
-        newUser.password = pass
-        
-        // call sign up function on the object
-        newUser.signUpInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                print("User Registered successfully")
-                // manually segue to logged in view
+        if(validSignUp()){
+            let newUser = PFUser();
+            newUser.username = usernameField.text// ?? "admin"
+            newUser.password = passwordField.text// ?? "admin"
+            newUser.signUpInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                if let error = error {
+                    print(error.localizedDescription)
+                } else {
+                    print("User Registered successfully")
+                    // manually segue to logged in view
+                    self.performSegueWithIdentifier("loginSegue", sender: nil)
+                }
             }
+            
+        }
+        else{
+            let alert = UIAlertController(title: "Error", message: "Invalid entry for username or password.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
     
     @IBAction func logIn(sender: AnyObject) {
         
-        let username = emailField.text ?? ""
-        let pass = passField.text ?? ""
-        
-        PFUser.logInWithUsernameInBackground(username, password: pass) { (user: PFUser?, error: NSError?) -> Void in
+        PFUser.logInWithUsernameInBackground(usernameField.text!, password: passwordField.text!) { (user: PFUser?, error: NSError?) -> Void in
             if let error = error {
                 print("User login failed.")
                 print(error.localizedDescription)
             } else {
                 print("User logged in successfully")
                 // display view controller that needs to shown after successful login
-                //modal push to chat view
-                let cvc : AnyObject! = self.storyboard!.instantiateViewControllerWithIdentifier("ChatVC")
-                self.showViewController(cvc as! ChatViewController, sender: cvc)
-                
+                self.performSegueWithIdentifier("loginSegue", sender: nil)
             }
         }
         
     }
     
+    func validSignUp()->Bool{
+        if let text = usernameField.text where text.isEmpty
+        {
+            return false;
+        }
+        if let text = passwordField.text where text.isEmpty
+        {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    @IBAction func onTappedOutside(sender: AnyObject) {
+        self.view.endEditing(true)
+    }
 
     /*
     // MARK: - Navigation

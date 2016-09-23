@@ -2,22 +2,20 @@
 //  ChatViewController.swift
 //  chatr
 //
-//  Created by Zachary West Guo on 9/22/16.
+//  Created by Zachary West Guo on 9/23/16.
 //  Copyright © 2016 zechariah. All rights reserved.
 //
-import Parse
-import UIKit
 
-class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
-    @IBOutlet weak var messageBox: UITextField!
-    @IBOutlet weak var tableView: UITableView!
+import UIKit
+import Parse
+
+class ChatViewController: UIViewController {
     
+    @IBOutlet weak var messageField: UITextField!
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        //tableView.estimatedRowHeight = 100
-        //tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.delegate = self
 
         // Do any additional setup after loading the view.
     }
@@ -27,40 +25,45 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func createMsg(sender: AnyObject) {
-        let text = messageBox.text
-        
-        let message = PFObject(className:"Message_fbuJuly2016")
-        message["text"] = text
-        message.saveInBackgroundWithBlock {
-            (success: Bool, error: NSError?) -> Void in
-            if (success) {
-                // The object has been saved.
-                print("successfully stored text")
-                
-            } else {
-                // There was a problem, check error.description
+    
+    @IBAction func sendMessage(sender: AnyObject) {
+        if(validMessage()){
+            let message = PFObject(className:"Message_fbuJuly2016")
+            message["text"] = messageField.text!
+            let temp = message["text"]
+            message.saveInBackgroundWithBlock {
+                (success: Bool, error: NSError?) -> Void in
+                if (success) {
+                    print("saved message: \(temp)")
+                    // The object has been saved.
+                } else {
+                    // There was a problem, check error.description
+                    print("Message save failed.")
+                    print(error!.localizedDescription)
+                }
             }
+            
         }
-        
-        self.tableView.reloadData()
-
-
+        else{
+            let alert = UIAlertController(title: "Error", message: "Invalid entry for username or password.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        
-        return 20;
+    func validMessage()->Bool{
+        if let text = messageField.text where text.isEmpty
+        {
+            return false;
+        }
+
+        return true;
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("chatCell", forIndexPath: indexPath) as! chatCell
-        cell.textLabel?.text = messageBox.text!;
-        
-        return cell
+    
+    @IBAction func onTappedOutside(sender: AnyObject) {
+        self.view.endEditing(true)
     }
-
 
     /*
     // MARK: - Navigation
