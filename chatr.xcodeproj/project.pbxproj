@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		64F7D9AC3DE2F1AF1F34792F /* Pods_chatr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B32B5EE03673C2FB008B5E24 /* Pods_chatr.framework */; };
 		861D1B611D95CAE1007E36C0 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861D1B601D95CAE1007E36C0 /* ChatViewController.swift */; };
+		861D1B631D95D575007E36C0 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861D1B621D95D575007E36C0 /* ChatTableViewCell.swift */; };
 		86B8CE811D94A05B00A929C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B8CE801D94A05B00A929C8 /* AppDelegate.swift */; };
 		86B8CE831D94A05B00A929C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B8CE821D94A05B00A929C8 /* ViewController.swift */; };
 		86B8CE861D94A05B00A929C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86B8CE841D94A05B00A929C8 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		861D1B601D95CAE1007E36C0 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		861D1B621D95D575007E36C0 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
 		86B8CE7D1D94A05B00A929C8 /* chatr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chatr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B8CE801D94A05B00A929C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86B8CE821D94A05B00A929C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				86B8CE8C1D94A05B00A929C8 /* Info.plist */,
 				86B8CE921D94A1D200A929C8 /* LoginViewController.swift */,
 				861D1B601D95CAE1007E36C0 /* ChatViewController.swift */,
+				861D1B621D95D575007E36C0 /* ChatTableViewCell.swift */,
 			);
 			path = chatr;
 			sourceTree = "<group>";
@@ -218,6 +221,7 @@
 			files = (
 				86B8CE931D94A1D200A929C8 /* LoginViewController.swift in Sources */,
 				86B8CE831D94A05B00A929C8 /* ViewController.swift in Sources */,
+				861D1B631D95D575007E36C0 /* ChatTableViewCell.swift in Sources */,
 				861D1B611D95CAE1007E36C0 /* ChatViewController.swift in Sources */,
 				86B8CE811D94A05B00A929C8 /* AppDelegate.swift in Sources */,
 			);

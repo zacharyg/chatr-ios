@@ -9,22 +9,52 @@
 import UIKit
 import Parse
 
-class ChatViewController: UIViewController {
+class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var messageField: UITextField!
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var timer: NSTimer!
+    var q: [PFObject] = [PFObject]();
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
 
         // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(ChatViewController.onTimer), userInfo: nil, repeats: true)
     }
     
+    func loadMessages(){
+        let query = PFQuery(className:"Message_fbuJuly2016")
+        query.whereKeyExists("text")
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            
+            if error == nil {
+                query.orderByDescending("createdAt")
+                // The find succeeded.
+                print("Successfully retrieved \(objects!.count) messages.")
+                // Do something with the found objects
+                if let objects = objects {
+                    self.q = objects;
+//                    for object in objects {
+//                        let msg = object["text"] as! String
+//                        print(msg)
+//                    }
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+            }
+        }
+    }
     
     @IBAction func sendMessage(sender: AnyObject) {
         if(validMessage()){
@@ -58,6 +88,31 @@ class ChatViewController: UIViewController {
         }
 
         return true;
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+        
+        return q.count
+    }
+
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("ChatCell", forIndexPath: indexPath) as! ChatTableViewCell
+        let singleObj = q[indexPath.row] 
+        let msg = singleObj["text"] as! String
+        cell.messageLabel.text = msg
+        
+        
+        return cell
+        
+    }
+    
+    func onTimer(){
+        //print("refresh")
+        loadMessages()
+        self.tableView.reloadData()
+        
     }
     
     
