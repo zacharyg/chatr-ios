@@ -5,7 +5,7 @@
 //  Created by Zachary West Guo on 9/22/16.
 //  Copyright © 2016 zechariah. All rights reserved.
 //
-
+import Parse
 import UIKit
 
 @UIApplicationMain
@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        Parse.setApplicationId("YpDZrCPA68Phd9FqiVXX1sZ5AgoD5wEk4FMn9p8o", clientKey:"JlqanetJccKLwbduN7YwO7ryU7nCvUsjCThmMOrP")
+
         return true
     }
 
